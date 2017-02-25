@@ -7,8 +7,6 @@ public class CameraBehavior : MonoBehaviour
 {
     public GameObject player;
 
-    private float speed = 0.1f;
-
     void Start()
     {
     }
@@ -17,11 +15,13 @@ public class CameraBehavior : MonoBehaviour
     {
         Camera camera = GetComponent<Camera>();
 
-		float widthThreshold = Screen.width / 3.0f;
+		float widthThreshold = Screen.width * 0.4f;
 		float heightThreshold = Screen.height / 3.0f;
 
 		Vector3 screenPos = camera.WorldToScreenPoint(player.transform.position);
 		Vector3 cameraPos = transform.position;
+
+		float speed = player.GetComponent<PlayerBehavior>().speed;
 
         if (screenPos.x < widthThreshold)
             cameraPos.x -= speed;

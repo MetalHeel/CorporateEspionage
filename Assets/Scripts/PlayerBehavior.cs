@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    private float speed = 0.1f;
+	private bool touchingWall = false;
+    public float speed;
 
 	void Start ()
     {	
@@ -13,20 +14,35 @@ public class PlayerBehavior : MonoBehaviour
 	
 	void Update ()
     {
-        Vector3 position = transform.position;
+		Vector3 position = GetComponent<Rigidbody>().position;
 
-        if (Input.GetKey(KeyCode.A))
-            position.x -= speed;
+		if (Input.GetKey(KeyCode.A))
+			position.x -= speed;
 
-        if (Input.GetKey(KeyCode.D))
-            position.x += speed;
+		if (Input.GetKey(KeyCode.D))
+			position.x += speed;
 
-        if (Input.GetKey(KeyCode.W))
-            position.z += speed;
+		if (Input.GetKey(KeyCode.W))
+			position.z += speed;
 
-        if (Input.GetKey(KeyCode.S))
-            position.z -= speed;
+		if (Input.GetKey(KeyCode.S))
+			position.z -= speed;
 
-        transform.position = position;
+		GetComponent<Rigidbody>().position = position;
+
+		if(!touchingWall)
+			transform.position = position;
+	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		if (collision.collider.tag == "StaticObject")
+			touchingWall = true;
+	}
+
+	void OnCollisionExit(Collision collision)
+	{
+		if (collision.collider.tag == "StaticObject")
+			touchingWall = false;
 	}
 }
