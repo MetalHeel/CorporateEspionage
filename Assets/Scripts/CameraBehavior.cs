@@ -13,29 +13,28 @@ public class CameraBehavior : MonoBehaviour
     {
     }
 
-    // Todo: Have a threshold position maybe.
     void Update()
     {
         Camera camera = GetComponent<Camera>();
 
-        Vector3 position = transform.position;
+		float widthThreshold = Screen.width / 3.0f;
+		float heightThreshold = Screen.height / 3.0f;
 
-        float height = 2f * camera.orthographicSize;
-        float width = height * camera.aspect;
+		Vector3 screenPos = camera.WorldToScreenPoint(player.transform.position);
+		Vector3 cameraPos = transform.position;
 
-        float heightQ = height / 4.0f;
-        float widthQ = width / 4.0f;
+        if (screenPos.x < widthThreshold)
+            cameraPos.x -= speed;
 
-        if (player.transform.position.x < transform.position.x - (2 * widthQ))
-            position.x -= speed;
+        if (screenPos.x > Screen.width - widthThreshold)
+            cameraPos.x += speed;
 
-        if (player.transform.position.x > transform.position.x + (2 * widthQ))
-            position.x += speed;
+        if (screenPos.y > Screen.height - heightThreshold)
+            cameraPos.z += speed;
 
-        if (player.transform.position.y > transform.position.y + (2 * heightQ))
-            position.y += speed;
+        if (screenPos.y < heightThreshold)
+            cameraPos.z -= speed;
 
-        if (player.transform.position.y < transform.position.y - (2 * heightQ))
-            position.y -= speed;
+		transform.position = cameraPos;
     }
 }
